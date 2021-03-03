@@ -212,35 +212,35 @@
                 }
 
                 // xử lý khi click button play
-                btnPlay.onclick = () => {
+                btnPlay.addEventListener("click", () => {
                     this.isPlaying ? audio.pause() : audio.play();
                     this.isPlaying = !this.isPlaying;
-                }
+                })
 
                 // khi bài hát được play
-                audio.onplay = function () {
+                audio.addEventListener('pause', function () {
                     player.classList.add('playing');
-                }
+                });
 
                 // khi bài hát được pause
-                audio.onpause = function () {
+                audio.addEventListener('pause', function () {
                     player.classList.remove('playing');
-                }
+                });
 
                 // khi tiến độ bài hát thay đổi
-                audio.ontimeupdate = function (event) {
+                audio.addEventListener('timeupdate', function () {
                     if (this.duration) {
                         let progressPercent = Math.floor(this.currentTime / this.duration * 100);
                         progress.value = progressPercent;
                     }
-                }
+                });
 
                 // Xử lý khi tua song
-                progress.oninput = this.seekTimeSong;
+                progress.addEventListener("input", this.seekTimeSong);
                 // Để được nhận dữ liệu cập nhật liên tục thì nên sử dụng oninput
                 // vì oninput không được hỗ trợ trong IE10 nên phải thêm onchange
 
-                progress.onchange = this.seekTimeSong;
+                progress.addEventListener("change", this.seekTimeSong);
 
             },
             seekTimeSong: function (event) {
