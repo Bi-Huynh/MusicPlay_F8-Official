@@ -1,0 +1,22 @@
+{
+  "name": "appmusicplay",
+  "version": "1.0.0",
+  "description": "Tạo 1 project music app đơn giản\r Bài Tập trên f8 officical",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bi-Huynh/MusicPlay_F8-Official.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bi-Huynh/MusicPlay_F8-Official/issues"
+  },
+  "homepage": "https://github.com/Bi-Huynh/MusicPlay_F8-Official#readme",
+  "dependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
