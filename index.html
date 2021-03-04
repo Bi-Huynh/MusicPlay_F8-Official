@@ -221,6 +221,7 @@
                 btnPlay.addEventListener("click", () => {
                     this.isPlaying ? audio.pause() : audio.play();
                     this.isPlaying = !this.isPlaying;
+                    // this.scrollToActiveSong();
                 });
 
                 // khi bài hát được play
@@ -257,15 +258,20 @@
                     } else {
                         this.nextSong();
                     }
-                    // audio.play();    // không biết sao khi dùng cái này thì đôi lúc chuột ấn sẽ không nhận
-                    btnPlay.click();
+                    console.log('next song')
+                    audio.play();    // không biết sao khi dùng cái này thì đôi lúc chuột ấn sẽ không nhận
+                    this.scrollToActiveSong();
                 })
 
                 // Xử lý sự kiện prev
                 btnPrev.addEventListener("click", () => {
-                    this.prevSong();
-                    // audio.play();
-                    btnPlay.click();
+                    if (this.isRandom) {
+                        this.playRandomSong();
+                    } else {
+                        this.prevSong();
+                    }
+                    audio.play();
+                    this.scrollToActiveSong();
                 })
 
                 // Xử lý tự động chuyển bài khi kết thúc bài nhạc
@@ -275,8 +281,7 @@
                             btnNext.click();
                         }
                     } else {
-                        // audio.play();
-                        btnPlay.click();
+                        audio.play();
                     }
                 })
 
@@ -345,8 +350,6 @@
                 if (nodeSong) {
                     nodeSong.classList.add('active');
                 }
-                // this.indexSongOld = this.currentIndex;
-                // this.loadCurrentSong();
             },
             nextSong: function () {
                 this.currentIndex++;    // chỉ cần tăng index lên thì currentSong sẽ tự nhảy lên bài tiếp
@@ -371,6 +374,15 @@
 
                 this.currentIndex = newIndex;
                 this.loadCurrentSong();
+            },
+            scrollToActiveSong: function () {
+                let songActive = $('.song.active');
+                setTimeout(() => {
+                    songActive.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 300);
             },
             start: function () {
                 // định nghĩa getter
