@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <title>Music App Basic</title>
+</head>
+
+<body>
+    <div class="player">
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <!-- Header -->
+            <header>
+                <h2>String 57th & 9th</h2>
+                <h4>Now playing:</h4>
+            </header>
+
+            <!-- CD -->
+            <div class="cd">
+                <div class="cd-thumb" style="background-image: url('./assets/img/dark.jpg')">
+                </div>
+            </div>
+
+            <!-- Control -->
+            <div class="control">
+                <div class="btn btn-repeat">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <div class="btn btn-prev">
+                    <i class="fas fa-step-backward"></i>
+                </div>
+                <div class="btn btn-toggle-play">
+                    <i class="fas fa-pause icon-pause"></i>
+                    <i class="fas fa-play icon-play"></i>
+                </div>
+                <div class="btn btn-next">
+                    <i class="fas fa-step-forward"></i>
+                </div>
+                <div class="btn btn-random">
+                    <i class="fas fa-random"></i>
+                </div>
+            </div>
+
+            <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
+
+            <audio id="audio" src=""></audio>
+        </div>
+
+        <!-- Playlist -->
+        <div class="playlist">
+        </div>
+    </div>
+
+    <script>
+        /*
+        1> render song
+        2> Scroll top
+        3> play, pause, seek
+        4> cd route
+        5> next, prev
+        6> random
+        7> next, repeat when ended
+        8> active song
+        9> scroll active song into view
+        10> play song when click
+        */
+
+        const $ = document.querySelector.bind(document);
+        const $$ = document.querySelectorAll.bind(document);
+
+        const playList = $('.playlist');
+        const cd = $('.cd');
+        const cdThumb = $('.cd-thumb');
+        const audio = $('#audio');
+        const btnPlay = $('.btn-toggle-play');
+        const player = $('.player');
+        const progress = $('#progress');
+        const btnNext = $('.btn-next');
+        const btnPrev = $('.btn-prev');
+        const btnRandom = $('.btn-random');
+        const btnRepeat = $('.btn-repeat');
+
+        const app = {
+            currentIndex: 0,
+            isPlaying: false,
+            isRandom: false,
+            isRepeat: false,
+            indexSongOld: -1,
+            songs: [
+                {
+                    name: 'Fade',
+                    singer: 'Alan Walker',
+                    path: './assets/music/Fade.mp3',
+                    image: './assets/img/fade.jpg'
+                },
+                {
+                    name: 'Fireflies',
+                    singer: 'Owl City',
+                    path: './assets/music/Fireflies.mp3',
+                    image: './assets/img/fireflies.jpg'
+                },
+                {
+                    name: 'Heroes Tonight',
+                    singer: 'Janji',
+                    path: './assets/music/HeroesTonight.mp3',
+                    image: './assets/img/heroesTonight.jpg'
+                },
+                {
+                    name: 'Invincible',
+                    singer: 'Deaf kev',
+                    path: './assets/music/Invincible.mp3',
+                    image: './assets/img/invincible.jpg'
+                },
+                {
+                    name: 'Jackpot',
+                    singer: 'The Fat Rat',
+                    path: './assets/music/Jackpot.mp3',
+                    image: './assets/img/jackpot.jpg'
+                },
+                {
+                    name: 'Monody',
+                    singer: 'TheFatRat',
+                    path: './assets/music/Monody.mp3',
+                    image: './assets/img/monody.jpg'
+                },
+                {
+                    name: 'Move Your Body',
+                    singer: 'Alan Walker',
+                    path: './assets/music/MoveYourBody.mp3',
+                    image: './assets/img/moveYourBody.jpg'
+                },
+                {
+                    name: 'My Heart',
+                    singer: 'Different Heaven & EH!DE',
+                    path: './assets/music/MyHeart.mp3',
+                    image: './assets/img/myHeart.jpg'
+                },
+                {
+                    name: 'Neveda',
+                    singer: 'Vicetone',
+                    path: './assets/music/Nevada.mp3',
+                    image: './assets/img/neveda.jpg'
+                },
+                {
+                    name: 'Never Be Alone',
+                    singer: 'TheFatRat',
+                    path: './assets/music/NeverBeAlone.mp3',
+                    image: './assets/img/neverBeAlone.jpg'
+                },
+                {
+                    name: 'Nova',
+                    singer: 'Ahrix',
+                    path: './assets/music/Nova.mp3',
+                    image: './assets/img/nova.jpg'
+                },
+                {
+                    name: 'Power Rangers LightSpeed Rescue',
+                    singer: 'Jetix Experience',
+                    path: './assets/music/PowerRangersLightSpeedRescue.mp3',
+                    image: './assets/img/powerRangerLightSpeedRescue.jpg'
+                },
+                {
+                    name: 'Prelude',
+                    singer: 'TheFatRat',
+                    path: './assets/music/PreludeVipEdit.mp3',
+                    image: './assets/img/prelude.jpg'
+                },
+                {
+                    name: 'Unity',
+                    singer: 'Alan Walker',
+                    path: './assets/music/Unity.mp3',
+                    image: './assets/img/unity.jpg'
+                }
+            ],
+            render: function () {
+                const hmtl = this.songs.map((song, index) => {
+                    return `
+                        <div class="song" data-index="${index}">
+                            <div class="thumb"
+                                style="background-image: url('${song.image}')">
+                            </div>
+                            <div class="body">
+                                <h3 class="title">${song.name}</h3>
+                                <p class="author">${song.singer}</p>
+                            </div>
+                            <div class="option">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+                playList.innerHTML = hmtl.join('');
+            },
+            defineProperties: function () {
+                // định nghĩa getter
+                Object.defineProperty(this, 'currentSong', {
+                    get: function () {
+                        return this.songs[this.currentIndex];
+                    }
+                });
+            },
+            handleEvents: function () {
+                let cdWidth = cd.offsetWidth;
+
+
+                // Xử lý phóng to thu nhỏ cd
+                document.addEventListener('scroll', () => {
+                    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    let newCdWidth = cdWidth - scrollTop;
+
+                    cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
+                    cd.style.opacity = newCdWidth / cdWidth;
+                });
+
+                // xử lý khi click button play
+                btnPlay.addEventListener("click", () => {
+                    this.isPlaying ? audio.pause() : audio.play();
+                    this.isPlaying = !this.isPlaying;
+                    // this.scrollToActiveSong();
+                });
+
+                // khi bài hát được play
+                audio.addEventListener('play', () => {
+                    player.classList.add('playing');
+                    this.animationCdRotate.play();
+                });
+
+                // khi bài hát được pause
+                audio.addEventListener('pause', () => {
+                    player.classList.remove('playing');
+                    this.animationCdRotate.pause();
+                });
+
+                // khi tiến độ bài hát thay đổi
+                audio.addEventListener('timeupdate', function () {
+                    if (this.duration) {
+                        let progressPercent = Math.floor(this.currentTime / this.duration * 100);
+                        progress.value = progressPercent;
+                    }
+                });
+
+                // Xử lý khi tua song
+                progress.addEventListener("input", this.seekTimeSong);
+                // Để được nhận dữ liệu cập nhật liên tục thì nên sử dụng oninput
+                // vì oninput không được hỗ trợ trong IE10 nên phải thêm onchange
+
+                progress.addEventListener("change", this.seekTimeSong);
+
+                // Xử lý sự kiện next
+                btnNext.addEventListener("click", () => {
+                    if (this.isRandom) {
+                        this.playRandomSong();
+                    } else {
+                        this.nextSong();
+                    }
+                    console.log('next song')
+                    audio.play();    // không biết sao khi dùng cái này thì đôi lúc chuột ấn sẽ không nhận
+                    this.scrollToActiveSong();
+                })
+
+                // Xử lý sự kiện prev
+                btnPrev.addEventListener("click", () => {
+                    if (this.isRandom) {
+                        this.playRandomSong();
+                    } else {
+                        this.prevSong();
+                    }
+                    audio.play();
+                    this.scrollToActiveSong();
+                })
+
+                // Xử lý tự động chuyển bài khi kết thúc bài nhạc
+                audio.addEventListener("ended", () => {
+                    if (!this.isRepeat) {
+                        if (this.currentIndex < this.songs.length) {
+                            btnNext.click();
+                        }
+                    } else {
+                        audio.play();
+                    }
+                })
+
+                // Xử lý khi bài hát lỗi
+                audio.addEventListener("error", () => {
+                    btnNext.click();
+                })
+
+                // Xử lý sự kiện nút random
+                btnRandom.addEventListener('click', () => {
+                    this.isRandom = !this.isRandom;
+                    btnRandom.classList.toggle('active', this.isRandom);
+                });
+
+                // Xử lý sự kiện nút Rereat (lặp lại 1 bài)
+                btnRepeat.addEventListener("click", () => {
+                    this.isRepeat = !this.isRepeat;
+                    btnRepeat.classList.toggle("active", this.isRepeat);
+                });
+
+                // Xử lý sự kiện active song current khi click
+                playList.addEventListener('click', (event) => {
+                    let nodeSong = event.target.closest('.song');
+                    this.currentIndex = Number(nodeSong.dataset.index);
+                    this.loadCurrentSong();
+                    btnPlay.click();
+                });
+            },
+            seekTimeSong: function (event) {
+                let seekTime = audio.duration / 100 * event.target.value;
+                audio.currentTime = seekTime;
+            },
+            animationCdRotate: (() => {
+                // sử dụng singleton pattern
+                let animationCd;
+                function init() {
+                    return cdThumb.animate([
+                        { transform: 'rotate(360deg)' }
+                    ], {
+                        duration: 10000,    // quay trong 10s
+                        iterations: Infinity   // lặp lại vô hạn
+                    });
+                }
+
+                return animationCd ? animationCd : animateCd = init();
+                // hàm trả về đối tượng đã được thêm animation nên có thể gọi pause
+                // phải gọi pause vì nếu không nhạc chưa phát nhưng đĩa nó sẽ tự quay thì không đúng logic
+            })(),
+            loadCurrentSong: function () {
+                let nameSong = $('header h2');
+                let nameSinger = $('header h4');
+
+                nameSong.innerText = this.currentSong.name;
+                nameSinger.innerText = this.currentSong.singer;
+                cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
+                audio.src = this.currentSong.path;
+                this.animationCdRotate.pause();
+                this.activeCurrentSong();
+            },
+            activeCurrentSong: function () {
+                let nodeSongOld = $(`.song.active`);
+                if (nodeSongOld) {
+                    nodeSongOld.classList.remove('active');
+                }
+                let nodeSong = $(`.song[data-index="${this.currentIndex}"]`);
+                if (nodeSong) {
+                    nodeSong.classList.add('active');
+                }
+            },
+            nextSong: function () {
+                this.currentIndex++;    // chỉ cần tăng index lên thì currentSong sẽ tự nhảy lên bài tiếp
+                if (this.currentIndex >= this.songs.length) {
+                    this.currentIndex = 0;
+                }
+                this.loadCurrentSong();
+            },
+            prevSong: function () {
+                this.currentIndex--;    // chỉ cần giảm index lên thì currentSong sẽ tự nhảy về bài trước
+                if (this.currentIndex <= 0) {
+                    this.currentIndex = this.songs.length - 1;
+                }
+                this.loadCurrentSong();
+            },
+            playRandomSong: function () {
+                let newIndex = 0;
+                do {
+                    newIndex = Math.floor(Math.random() * this.songs.length);
+                }
+                while (newIndex === this.currentIndex)
+
+                this.currentIndex = newIndex;
+                this.loadCurrentSong();
+            },
+            scrollToActiveSong: function () {
+                let songActive = $('.song.active');
+                setTimeout(() => {
+                    songActive.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 300);
+            },
+            start: function () {
+                // định nghĩa getter
+                this.defineProperties();
+
+                // Sử lý toàn bộ sự kiện
+                this.handleEvents();
+
+                // load thông tin bài hát hiện tại
+                this.loadCurrentSong();
+
+                // load danh sách song
+                this.render();
+
+                // active bài hát đang được chọn
+                this.activeCurrentSong();
+            }
+        };
+
+        app.start();
+    </script>
+</body>
+
+</html>
