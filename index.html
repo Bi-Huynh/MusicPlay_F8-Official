@@ -73,6 +73,8 @@
         const $ = document.querySelector.bind(document);
         const $$ = document.querySelectorAll.bind(document);
 
+        const PLAYER_STORAGE_KEY = '_PLAYER';
+
         const playList = $('.playlist');
         const cd = $('.cd');
         const cdThumb = $('.cd-thumb');
@@ -90,7 +92,7 @@
             isPlaying: false,
             isRandom: false,
             isRepeat: false,
-            indexSongOld: -1,
+            config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
             songs: [
                 {
                     name: 'Fade',
@@ -177,6 +179,10 @@
                     image: './assets/img/unity.jpg'
                 }
             ],
+            setConfig: function (key, value) {
+                this.config[key] = value;
+                localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
+            },
             render: function () {
                 const hmtl = this.songs.map((song, index) => {
                     return `
@@ -258,7 +264,6 @@
                     } else {
                         this.nextSong();
                     }
-                    console.log('next song')
                     audio.play();    // không biết sao khi dùng cái này thì đôi lúc chuột ấn sẽ không nhận
                     this.scrollToActiveSong();
                 })
@@ -293,21 +298,29 @@
                 // Xử lý sự kiện nút random
                 btnRandom.addEventListener('click', () => {
                     this.isRandom = !this.isRandom;
+                    this.setConfig('isRandom', this.isRandom);
                     btnRandom.classList.toggle('active', this.isRandom);
                 });
 
                 // Xử lý sự kiện nút Rereat (lặp lại 1 bài)
                 btnRepeat.addEventListener("click", () => {
                     this.isRepeat = !this.isRepeat;
+                    this.setConfig('isRepeat', this.isRepeat);
                     btnRepeat.classList.toggle("active", this.isRepeat);
                 });
 
                 // Xử lý sự kiện active song current khi click
                 playList.addEventListener('click', (event) => {
-                    let nodeSong = event.target.closest('.song');
-                    this.currentIndex = Number(nodeSong.dataset.index);
-                    this.loadCurrentSong();
-                    btnPlay.click();
+                    let nodeSong = event.target.closest('.song:not(.active)');
+                    let optionSong = event.target.closest('.option');
+                    if (nodeSong && !optionSong) {
+                        this.currentIndex = Number(nodeSong.dataset.index);
+                        this.loadCurrentSong();
+                        audio.play();
+                    }
+                    if (optionSong) {
+                        console.log('click optionSong');
+                    }
                 });
             },
             seekTimeSong: function (event) {
@@ -340,6 +353,10 @@
                 audio.src = this.currentSong.path;
                 this.animationCdRotate.pause();
                 this.activeCurrentSong();
+            },
+            loadConfig: function () {
+                this.isRepeat = this.config.isRepeat;
+                this.isRandom = this.config.isRandom;
             },
             activeCurrentSong: function () {
                 let nodeSongOld = $(`.song.active`);
@@ -385,6 +402,9 @@
                 }, 300);
             },
             start: function () {
+                // load cấu hình từ config
+                this.loadConfig();
+
                 // định nghĩa getter
                 this.defineProperties();
 
@@ -399,6 +419,10 @@
 
                 // active bài hát đang được chọn
                 this.activeCurrentSong();
+
+                // hiện thị trạng thái prosess
+                btnRandom.classList.toggle('active', this.isRandom);
+                btnRepeat.classList.toggle("active", this.isRepeat);
             }
         };
 
