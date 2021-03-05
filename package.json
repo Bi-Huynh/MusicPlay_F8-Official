@@ -4,6 +4,7 @@
   "description": "Tạo 1 project music app đơn giản\r Bài Tập trên f8 officical",
   "main": "index.js",
   "scripts": {
+    "nodemon": "nodemon --inspect Main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/Bi-Huynh/MusicPlay_F8-Official#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "mongoose": "^5.11.18",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "pug": "^3.0.2"
   }
 }
