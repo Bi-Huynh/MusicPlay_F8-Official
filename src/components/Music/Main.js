@@ -12,12 +12,15 @@ const port = 3000;
 app.use(morgan('combined'));
 
 // sử dụng handlebars - template engine - có nhiều template engine khác nữa: pug, fs,.... 
-app.engine('handlebars', handlebars());
-app.set('view engine', 'handlebars');
+app.engine('hbs', handlebars({
+    extname: '.hbs' // cấu hình đuôi file, cho đuôi file khỏi dài
+}));
+app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname.slice(0, __dirname.length - 17), 'resources/views'));
-// console.log('path: ', path.join(__dirname.slice(0, __dirname.length - 17), 'resources/views'));
-// console.log(__dirname.slice(0, __dirname.length - 17));
+
 
 app.get('/', (req, res) => res.render('home'));
+
+app.get('/news', (req, res) => res.render('news'));
 
 app.listen(port, () => console.log('port is ' + port));
