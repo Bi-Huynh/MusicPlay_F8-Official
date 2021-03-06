@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --inspect src/components/Music/Main.js",
+    "watch": "node-sass --watch src/resources/scss/ --output public/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
