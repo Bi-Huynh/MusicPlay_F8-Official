@@ -1,4 +1,5 @@
-.vscode
+#
+.vscode/
 
-public/css
-node_modules
+public/css/
+node_modules/
