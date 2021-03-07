@@ -5,5 +5,4 @@ const userController = require('./controller');
 router.get('/', userController.index);
 router.get('/create', userController.create);
 
-
 module.exports = router;

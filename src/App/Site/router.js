@@ -5,5 +5,4 @@ const siteController = require('./controller');
 router.get('/search', siteController.search);
 router.get('/', siteController.home);
 
-
 module.exports = router;
