@@ -1,0 +1,45 @@
+<div class="info-user mt-4">
+    <form action="/course/{{_Course._id}}?_method=PUT" method="post">
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationServer01">Name course</label>
+                <input type="text" class="form-control" id="validationServer01" name="name" placeholder="Name Course"
+                    value="{{_Course.name}}" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Name Course.
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationServer02">Description</label>
+                <textarea class="form-control" id="validationServer02" name="description" placeholder="Description"
+                    required>{{_Course.description}}</textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Description.
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationServer03">Video Id</label>
+                <input type="text" class="form-control" id="validationServer03" name="videoId" placeholder="videoId"
+                    value="{{_Course.videoId}}" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Video Id.
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+</div>
+<div class="listInfo"></div>
