@@ -24,8 +24,14 @@
             <tr>
                 <th scope="col">Choose</th>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Time Create At</th>
+                <th scope="col">
+                    Name
+                    {{{sortable 'name' _sort}}}
+                </th>
+                <th scope="col">
+                    Time Create At
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
                 {{!-- <th scope="col">Time Update At</th> --}}
                 <th></th>
                 <th></th>

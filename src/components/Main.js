@@ -43,6 +43,28 @@ app.engine(
         extname: '.hbs', // cấu hình đuôi file, cho đuôi file khỏi dài
         helpers: {
             sum: (a, b) => a + b,
+            sortable: (column, sort) => {
+                const sortType = column === sort.column ? sort.type : 'default';
+
+                const icons = {
+                    default: 'oi oi-elevator',
+                    asc: 'oi oi-sort-ascending',
+                    desc: 'oi oi-sort-descending',
+                };
+
+                const types = {
+                    default: 'desc',
+                    asc: 'desc',
+                    desc: 'asc',
+                };
+
+                const icon = icons[sortType];
+                const type = types[sortType];
+
+                return `<a href="?_sort&column=${column}&type=${type}">
+                        <span class="${icon} ml-2"></span>
+                    </a>`;
+            },
         },
     })
 );
