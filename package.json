@@ -1,0 +1,41 @@
+{
+    "name": "appmusicplay",
+    "version": "1.0.0",
+    "description": "Tạo 1 project music app đơn giản\r Bài Tập trên f8 officical",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon --inspect src/components/Main.js",
+        "watch": "node-sass --watch src/resources/scss/ --output public/css/",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Bi-Huynh/MusicPlay_F8-Official.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Bi-Huynh/MusicPlay_F8-Official/issues"
+    },
+    "homepage": "https://github.com/Bi-Huynh/MusicPlay_F8-Official#readme",
+    "lint-staged": {
+        "*": "your-cmd"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "express-handlebars": "^5.2.1",
+        "method-override": "^3.0.0",
+        "mongoose": "^5.11.18",
+        "mongoose-delete": "^0.5.3",
+        "mongoose-slug-generator": "^1.0.4",
+        "nodemon": "^2.0.7",
+        "pug": "^3.0.2"
+    },
+    "devDependencies": {
+        "husky": "^5.1.3",
+        "lint-staged": "^10.5.4",
+        "morgan": "^1.10.0",
+        "node-sass": "^5.0.0",
+        "prettier": "^2.2.1"
+    }
+}

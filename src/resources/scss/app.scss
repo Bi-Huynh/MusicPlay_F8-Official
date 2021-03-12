@@ -1,0 +1,18 @@
+@import 'variables';
+
+html {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.container {
+    // color: $red-color;
+    // font-size: 12px;
+    margin: auto;
+    padding: 0 20;
+}
+
+.checkbox-select-all-options {
+    max-width: 200px;
+    margin: 0 8px;
+}
