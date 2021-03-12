@@ -4,6 +4,8 @@ const userRouter = require('./Users/router');
 const courseRouter = require('./Courses/router');
 const meRouter = require('./Me/router');
 
+const sortMiddleware = require('./middleware/sort');
+
 function router(app) {
     app.use('/news', newsRouter);
 
@@ -11,7 +13,7 @@ function router(app) {
 
     app.use('/course', courseRouter);
 
-    app.use('/me', meRouter);
+    app.use('/me', sortMiddleware, meRouter);
 
     app.use('/', siteRouter);
 }
